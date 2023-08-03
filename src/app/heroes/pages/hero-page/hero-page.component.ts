@@ -25,7 +25,7 @@ export class HeroPageComponent implements OnInit{
     window.scrollTo({ top: 0 })
     this.activatedRoute.params
     .pipe(
-      delay(1500),
+      delay(1000),
       switchMap(({id}) => this.heroesService.getById(id)),
     )
     .subscribe(hero => {

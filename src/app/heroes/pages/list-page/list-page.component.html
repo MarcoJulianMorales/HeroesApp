@@ -1,8 +1,18 @@
-<h1>Heroes List</h1>
-<mat-divider></mat-divider>
+<ng-template #divLoading>
+    <mat-grid-list class="col-6" cols="1">
+        <mat-grid-tile>
+            <mat-spinner></mat-spinner>
+        </mat-grid-tile>
+    </mat-grid-list>
+</ng-template>
 
-<div class="grid bm-8">
-    <div *ngFor="let hero of heroes" class="col-12 sm:col-4 md:col-3 xl:col-2">
-        <heroes-hero-card [hero]="hero"></heroes-hero-card>
+<div *ngIf="!isLoading; else divLoading">
+    <h1>Heroes List</h1>
+    <mat-divider></mat-divider>
+
+    <div class="grid bm-8">
+        <div *ngFor="let hero of heroes" class="col-12 sm:col-4 md:col-3 xl:col-2">
+            <heroes-hero-card [hero]="hero"></heroes-hero-card>
+        </div>
     </div>
 </div>

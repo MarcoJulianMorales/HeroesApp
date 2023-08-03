@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { IHero, Publisher } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, switchMap } from 'rxjs';
+import { Subject, Subscription, debounceTime, delay, filter, switchMap, tap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
@@ -15,6 +15,8 @@ import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-
   ]
 })
 export class AddPageComponent implements OnInit{
+  public isLoading = true;
+
   public heroForm = new FormGroup({
     id:                new FormControl(''),
     superhero:         new FormControl('', {nonNullable:true}),
@@ -43,16 +45,33 @@ export class AddPageComponent implements OnInit{
     ){}
   
   ngOnInit(): void {
-    if(!this.router.url.includes('edit')) return;
+    if(!this.router.url.includes('edit'))
+    {
+      this.delayTime();
+      return;
+    }
 
     this.activatedRoute.params
     .pipe(
+      delay(1000),
       switchMap(({id}) => this.heroesService.getById(id) ),
+      tap(() => {this.isLoading = false}),
     )
     .subscribe( hero => {
       if(!hero) return this.router.navigateByUrl('/');
 
       this.heroForm.reset(hero);
+      return;
+    })
+  }
+
+  delayTime(): void{
+    this.activatedRoute.params
+    .pipe(
+      delay(1000),
+      tap(() => {this.isLoading = false}),
+    )
+    .subscribe( () => {
       return;
     })
   }

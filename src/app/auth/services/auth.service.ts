@@ -41,6 +41,6 @@ export class AuthService {
 
     logout(): void{
         this.user = undefined;
-        localStorage.clear();
+        localStorage.removeItem('token');
     }
 }
